@@ -52,7 +52,10 @@ app.post("/profile/:symbol", async (req, res) => {
         const doc = await firestore.collection("company-profile").doc(symbol).get();
         if (doc.exists) {
             logger.info("profile already exists", {symbol});
-            res.status(200).send("profile already exists");
+            res.status(200).send({
+                message: "profile already exists",
+                profile: doc.data(),
+            });
             return;
         }
 
@@ -80,7 +83,10 @@ app.post("/profile/:symbol", async (req, res) => {
         // Add the company stock ticker and description in Firestore
         const writeResult = await firestore.collection("company-profile").doc(symbol).set(profile);
         logger.info("profile created successfully", {writeResult});
-        res.status(201).send("profile created successfully");
+        res.status(201).send({
+            message: "profile created successfully",
+            profile,
+        });
     } catch (error) {
         // @ts-ignore
         logger.error("error creating profile", {error: error.message});
