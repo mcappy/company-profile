@@ -61,6 +61,13 @@ app.post("/profile/:symbol", async (req, res) => {
       description: secProfile.description,
       status: Status.InProgress,
       ttl: Timestamp.fromDate(ttl),
+      name: secProfile.registrantName,
+      ceo: secProfile.ceo,
+      city: secProfile.city,
+      state: secProfile.state,
+      country: secProfile.country,
+      website: secProfile.website,
+      employees: secProfile.employees,
     };
     logger.info("profile fetched successfully", {profile_description: profile.description});
     // Add the company stock ticker and description in Firestore
