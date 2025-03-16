@@ -1,3 +1,4 @@
+/* eslint-disable */
 import express from "express";
 import {logger} from "firebase-functions";
 import {CompanyProfile, SECProfile, Status} from "./types";
@@ -9,10 +10,6 @@ const app = express();
 const FMP_API_KEY = defineSecret("FMP_API_KEY");
 const firestore = getFirestore();
 
-// eslint-disable-next-line max-len
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line max-len
 const fetchSECProfile = async (symbol: string): Promise<SECProfile> => {
   const url = `https://financialmodelingprep.com/stable/sec-profile?symbol=${symbol}&apikey=${FMP_API_KEY.value()}`;
   try {
@@ -62,21 +59,17 @@ app.post("/profile/:symbol", async (req, res) => {
       symbol: secProfile.symbol,
       cik: secProfile.cik,
       description: secProfile.description,
-      status: Status.New,
+      status: Status.InProgress,
       ttl: Timestamp.fromDate(ttl),
     };
-    // eslint-disable-next-line max-len
     logger.info("profile fetched successfully", {profile_description: profile.description});
     // Add the company stock ticker and description in Firestore
-    // eslint-disable-next-line max-len
     const writeResult = await firestore.collection("company-profile").doc(symbol).set(profile);
     logger.info("profile created successfully", {writeResult});
     res.status(201).send("profile created successfully");
   } catch (error) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     logger.error("error creating profile", {error: error.message});
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     res.status(500).send(`error creating profile: ${error.message}`);
   }

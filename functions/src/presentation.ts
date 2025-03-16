@@ -1,7 +1,8 @@
-// eslint-disable-next-line max-len
+/* eslint-disable */
 import {onDocumentCreated} from "firebase-functions/firestore";
 import {logger} from "firebase-functions";
 import {getFirestore} from "firebase-admin/firestore";
+import {Status} from "./types";
 
 const firestore = getFirestore();
 
@@ -14,12 +15,12 @@ export const presentation = onDocumentCreated("company-profile/{symbol}", async 
   // Wait 15 seconds and update the documents status to PresentationCreated
   setTimeout(async () => {
     try {
+      // Update the document status to Created to indicate that the presentation has been created
+      // and add a dummy url to the presentation
+      await firestore.doc(`company-profile/${symbol}`).update({status: Status.Created, downloadUrl: "https://example.com"});
       // eslint-disable-next-line max-len
-      await firestore.doc(`company-profile/${symbol}`).update({status: "PRESENTATION_CREATED"});
-      // eslint-disable-next-line max-len
-      logger.info("profile status updated", {symbol, status: "PRESENTATION_CREATED"});
+      logger.info("profile status updated", {symbol, status: Status.Created});
     } catch (error) {
-      // eslint-disable-next-line max-len,@typescript-eslint/ban-ts-comment
       // @ts-ignore
       logger.error("error updating profile status", {error: error.message});
     }
