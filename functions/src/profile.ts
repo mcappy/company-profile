@@ -3,7 +3,7 @@ import {logger} from "firebase-functions";
 import {CompanyProfile, SECProfile, Status} from "./types";
 import {onRequest} from "firebase-functions/v2/https";
 import {defineSecret} from "firebase-functions/params";
-import {getFirestore} from "firebase-admin/firestore";
+import {getFirestore, Timestamp} from "firebase-admin/firestore";
 
 const app = express();
 const FMP_API_KEY = defineSecret("FMP_API_KEY");
@@ -53,11 +53,17 @@ app.post("/profile/:symbol", async (req, res) => {
     }
 
     const secProfile = await fetchSECProfile(symbol);
+
+    // Delete profiles 24 hours after creation
+    const ttl = new Date();
+    ttl.setDate(ttl.getDate() + 1);
+
     const profile: CompanyProfile = {
       symbol: secProfile.symbol,
       cik: secProfile.cik,
       description: secProfile.description,
       status: Status.New,
+      ttl: Timestamp.fromDate(ttl),
     };
     // eslint-disable-next-line max-len
     logger.info("profile fetched successfully", {profile_description: profile.description});

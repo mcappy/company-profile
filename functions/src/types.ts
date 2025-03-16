@@ -1,3 +1,5 @@
+import {Timestamp} from "firebase-admin/firestore";
+
 export type SECProfile = {
     symbol: string;
     cik: string;
@@ -50,4 +52,5 @@ export type CompanyProfile = {
     cik: string;
     description: string;
     status: Status
+    ttl: Timestamp;
 }
