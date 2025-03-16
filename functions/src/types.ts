@@ -40,11 +40,11 @@ export type SECProfile = {
 
 export enum Status {
     // eslint-disable-next-line max-len
-    // New means the company profile has been created but no presentation has been created
-    New = "NEW",
+    // IN_PROGRESS means the company profile has been created and an event has been triggered to create a presentation
+    InProgress = "IN_PROGRESS",
     // eslint-disable-next-line max-len
-    // PresentationCreated means the company profile has been created and a presentation has been created
-    PresentationCreated = "PRESENTATION_CREATED",
+    // Created means the presentation has been created
+    Created = "CREATED",
 }
 
 export type CompanyProfile = {
